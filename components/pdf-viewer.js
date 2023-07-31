@@ -12,6 +12,21 @@ import { FaBackward, FaForward } from "react-icons/fa";
 // pdfjs.GlobalWorkerOptions.workerSrc = workerSrc;
 pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/${pdfjs.version}/pdf.worker.js`;
 
+const Page = React.forwardRef(({ pageNum, scale, key }, ref) => {
+  console.log({ fromWithinPage: pageNum });
+  return (
+    <div ref={ref} key={key}>
+      <ReactPdfPage
+        pageNumber={pageNum}
+        width={500}
+        scale={scale}
+        renderTextLayer={false}
+        renderAnnotationLayer={false}
+      />
+    </div>
+  );
+});
+
 export default function PDFViewer(props) {
   const bookRef = useRef(null);
 
@@ -42,35 +57,9 @@ export default function PDFViewer(props) {
       numPages,
     });
     const currentPage = e.object.pages.currentPageIndex;
-    // setPageNumber(currentPage);
+    setPageNumber(currentPage);
   }, []);
 
-  const Page = React.forwardRef(({ pageNum }, ref) => {
-    console.log({ fromWithinPage: pageNum });
-    return (
-      <div ref={ref}>
-        <ReactPdfPage
-          pageNumber={pageNum}
-          width={500}
-          scale={scale}
-          renderTextLayer={false}
-          renderAnnotationLayer={false}
-        />
-      </div>
-    );
-  });
-
-  console.log(
-    props,
-    file,
-    numPages,
-    Array(numPages)
-      .fill(0)
-      .map((page, index) => index)
-  );
-  {
-    console.log({ f: bookRef.current?.pageFlip() });
-  }
   return (
     <div className="">
       <div>
@@ -91,7 +80,7 @@ export default function PDFViewer(props) {
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
             <HTMLFlipBook
               width={600}
-              height={1000}
+              height={700}
               onFlip={onFlip}
               ref={bookRef}
             >
@@ -99,13 +88,7 @@ export default function PDFViewer(props) {
                 .fill(0)
                 .map((x, pageNum) => {
                   return (
-                    <Page
-                      key={pageNum}
-                      pageNum={pageNum + 1}
-                      scale={scale}
-                      renderTextLayer={false}
-                      renderAnnotationLayer={false}
-                    />
+                    <Page key={pageNum} pageNum={pageNum + 1} scale={scale} />
                   );
                 })}
             </HTMLFlipBook>
@@ -113,11 +96,7 @@ export default function PDFViewer(props) {
           <button
             className="absolute top-0 left-20 w-1/3 h-screen flex justify-start items-center"
             onClick={() => {
-              console.log({
-                f: bookRef.current.pageFlip().pages.currentPageIndex + 1,
-              });
               bookRef.current.pageFlip().flipPrev();
-              // if (!(pageNumber === 1)) setPageNumber(pageNumber - 1);
             }}
           >
             <FaBackward />
@@ -125,9 +104,7 @@ export default function PDFViewer(props) {
           <button
             className="absolute top-0 right-20 w-1/3 h-screen flex justify-end items-center"
             onClick={() => {
-              // if (!(pageNumber === numPages)) setPageNumber(pageNumber + 1);
               bookRef.current.pageFlip().flipNext();
-              // bookRef.current.pageFlip().flipPrevious();
             }}
           >
             <FaForward />
@@ -136,8 +113,7 @@ export default function PDFViewer(props) {
       </div>
       <div className="flex justify-center">
         <span>
-          Page {bookRef.current?.pageFlip()?.pages?.currentPageIndex + 1} of{" "}
-          {numPages}
+          Page {pageNumber + 1} - {pageNumber + 2} of {numPages}
         </span>
       </div>
     </div>
