@@ -15,7 +15,7 @@ pdfjs.GlobalWorkerOptions.workerSrc = `//cdnjs.cloudflare.com/ajax/libs/pdf.js/$
 export default function PDFViewer(props) {
   const bookRef = useRef(null);
 
-  const [scale, setScale] = useState(1.2);
+  const [scale, setScale] = useState(1.5);
   const [file, setFile] = useState(null);
   const [numPages, setNumPages] = useState(null);
   const [pageNumber, setPageNumber] = useState(1);
@@ -46,12 +46,25 @@ export default function PDFViewer(props) {
   const Page = React.forwardRef(({ pageNum }, ref) => {
     return (
       <div ref={ref}>
-        <ReactPdfPage pageNum={pageNum} width={300} />
+        <ReactPdfPage
+          pageNum={pageNum}
+          width={300}
+          scale={scale}
+          renderTextLayer={false}
+          renderAnnotationLayer={false}
+        />
       </div>
     );
   });
 
-  console.log(props, file, numPages);
+  console.log(
+    props,
+    file,
+    numPages,
+    Array(numPages)
+      .fill(0)
+      .map((page, index) => index)
+  );
   return (
     <div className="">
       <div>
@@ -70,23 +83,17 @@ export default function PDFViewer(props) {
           />
 
           <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
-            <HTMLFlipBook width={300} height={500} onFlip={onFlip}>
-              {Array(numPages).map((x, pageNumber) => {
-                return (
-                  <Page
-                    pageNumber={pageNumber + 1}
-                    scale={scale}
-                    renderTextLayer={false}
-                    renderAnnotationLayer={false}
-                  />
-                );
-              })}
-            </HTMLFlipBook>
+            <ReactPdfPage
+              pageNumber={pageNumber}
+              width={300}
+              scale={scale}
+              renderTextLayer={false}
+              renderAnnotationLayer={false}
+            />
           </Document>
           <button
             className="absolute top-0 left-20 w-1/3 h-screen flex justify-start items-center"
             onClick={() => {
-              bookRef.current.pageFlip().flipNext();
               if (!(pageNumber === 1)) setPageNumber(pageNumber - 1);
             }}
           >
