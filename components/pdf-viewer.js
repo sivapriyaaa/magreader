@@ -22,6 +22,7 @@ const Page = React.forwardRef(({ pageNum, scale, key }, ref) => {
         scale={scale}
         renderTextLayer={false}
         renderAnnotationLayer={false}
+        loading="Loading the Page..."
       />
     </div>
   );
@@ -77,10 +78,18 @@ export default function PDFViewer(props) {
             file={file}
           />
 
-          <Document file={file} onLoadSuccess={onDocumentLoadSuccess}>
+          <Document
+            file={file}
+            loading={
+              <div>
+                <h1>Loading PDF DOcument...</h1>
+              </div>
+            }
+            onLoadSuccess={onDocumentLoadSuccess}
+          >
             <HTMLFlipBook
               width={600}
-              height={700}
+              height={1000}
               onFlip={onFlip}
               ref={bookRef}
             >
