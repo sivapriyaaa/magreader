@@ -1,11 +1,13 @@
 import Link from "next/link";
 import Image from "next/image";
 import papers from "@/utils/utils";
+import Script from "next/script";
 
 const Categories = () => {
   return (
     <div className="flex flex-row flex-wrap justify-center mt-16">
-      {" "}
+      <Script src="https://aframe.io/releases/1.3.0/aframe.min.js" />
+      <Script src="https://raw.githack.com/AR-js-org/AR.js/master/three.js/build/ar.js" />{" "}
       {papers.map((book) => (
         <Link
           href={`/pageview`}

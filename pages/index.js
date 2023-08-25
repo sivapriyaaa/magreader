@@ -1,5 +1,6 @@
 import dynamic from "next/dynamic";
 import { useRouter } from "next/router";
+import Script from "next/script";
 
 const PDFViewer = dynamic(() => import("../components/pdf-viewer"), {
   ssr: false,
