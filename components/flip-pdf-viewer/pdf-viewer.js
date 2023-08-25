@@ -7,7 +7,6 @@ import PDFRenderrer from "./pdf-renderrer";
 const PDFViewer = () => {
   return (
     <div>
-      <Script src="/js/3dflipbook.min.js" />
       <br />
       <br />
       <br />

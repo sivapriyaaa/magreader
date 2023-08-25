@@ -22,7 +22,7 @@ const PDFRenderrer = () => {
       });
 
       window.$("#pdf-container").css("margin-top", "100px");
-      window.$("#pdf-container").css("height", "70vh");
+      window.$("#pdf-container").css("height", "90vh");
     }
   }, [this?.window, file]);
 
@@ -35,11 +35,6 @@ const PDFRenderrer = () => {
     }
   }, []);
   console.log(this?.window);
-  return (
-    <div
-      id="pdf-container"
-      style={{ marginTop: "100px !important", height: "70vh !important" }}
-    ></div>
-  );
+  return <div id="pdf-container"></div>;
 };
 export default PDFRenderrer;
